@@ -13,12 +13,12 @@
   --color-day-border: rgba(90, 143, 90, 0.3);
   
   /* Colores del tema noche */
-  --color-night-bg: #1a2f23;
+  --color-night-bg: #051716;
   --color-night-text: #e8f5e9;
   --color-night-primary: #7cb97c;
   --color-night-secondary: #5a8f5a;
   --color-night-accent: #8fbc8f;
-  --color-night-card: rgba(26, 47, 35, 0.9);
+  --color-night-card: rgba(5, 23, 22, 0.9);
   --color-night-border: rgba(124, 185, 124, 0.3);
 }
 
@@ -41,7 +41,7 @@
   }
   
   .glass-night {
-    background: rgba(26, 47, 35, 0.9);
+    background: rgba(5, 23, 22, 0.85);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(124, 185, 124, 0.3);
   }
