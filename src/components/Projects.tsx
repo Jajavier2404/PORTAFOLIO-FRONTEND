@@ -48,8 +48,139 @@ const projects = [
     githubUrl: 'https://github.com/jajavier2404',
     liveUrl: '#',
     featured: false
+  },
+  {
+    title: 'E-commerce Platform',
+    description: 'Plataforma de comercio electrónico con pasarela de pagos, gestión de inventario y panel de administración.',
+    image: '/images/bg-day.png',
+    technologies: ['Next.js', 'Stripe', 'Prisma', 'PostgreSQL'],
+    githubUrl: 'https://github.com/jajavier2404',
+    liveUrl: '#',
+    featured: false
+  },
+  {
+    title: 'Real-time Chat App',
+    description: 'Aplicación de mensajería en tiempo real con WebSockets, notificaciones push y cifrado end-to-end.',
+    image: '/images/bg-night.png',
+    technologies: ['Socket.io', 'Express', 'MongoDB', 'Redis'],
+    githubUrl: 'https://github.com/jajavier2404',
+    liveUrl: '#',
+    featured: false
   }
 ];
+
+// Duplicar proyectos para crear efecto infinito
+const duplicatedProjects = [...projects, ...projects, ...projects];
+
+function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
+  const { isDark } = useTheme();
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className={cn(
+        'group relative rounded-2xl overflow-hidden transition-all duration-300 flex-shrink-0 w-[350px] md:w-[400px]',
+        isDark ? 'glass-night' : 'glass-day'
+      )}
+    >
+      {/* Image */}
+      <div className="relative h-48 overflow-hidden">
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        <div className={cn(
+          'absolute inset-0 transition-opacity duration-300',
+          isDark ? 'bg-gradient-to-t from-night-bg to-transparent' : 'bg-gradient-to-t from-day-bg to-transparent'
+        )} />
+        
+        {project.featured && (
+          <div className="absolute top-4 left-4">
+            <span className={cn(
+              'px-3 py-1 rounded-full text-xs font-bold',
+              isDark
+                ? 'bg-day-primary text-night-bg'
+                : 'bg-day-primary text-white'
+            )}>
+              Destacado
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="p-6">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <Folder className="w-5 h-5 text-day-primary" />
+            <h3 className={cn(
+              'text-xl font-bold',
+              isDark ? 'text-night-text' : 'text-day-text'
+            )}>
+              {project.title}
+            </h3>
+          </div>
+        </div>
+
+        <p className={cn(
+          'mb-4 leading-relaxed text-sm',
+          isDark ? 'text-night-text/80' : 'text-day-text/80'
+        )}>
+          {project.description}
+        </p>
+
+        <div className="flex flex-wrap gap-2 mb-6">
+          {project.technologies.slice(0, 4).map((tech) => (
+            <span
+              key={tech}
+              className={cn(
+                'px-3 py-1 rounded-lg text-xs font-medium',
+                isDark
+                  ? 'bg-night-primary/20 text-night-primary'
+                  : 'bg-day-primary/20 text-day-primary'
+              )}
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex gap-3">
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+              isDark
+                ? 'bg-night-primary/20 text-night-text hover:bg-night-primary/30'
+                : 'bg-day-primary/20 text-day-text hover:bg-day-primary/30'
+            )}
+          >
+            <GitHubIcon className="w-4 h-4" />
+            Código
+          </a>
+          <a
+            href={project.liveUrl}
+            className={cn(
+              'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+              isDark
+                ? 'bg-day-primary text-night-bg hover:bg-night-accent'
+                : 'bg-day-primary text-white hover:bg-day-accent'
+            )}
+          >
+            <ExternalLink className="w-4 h-4" />
+            Ver demo
+          </a>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export function Projects() {
   const { isDark } = useTheme();
@@ -58,7 +189,7 @@ export function Projects() {
     <section
       id="proyectos"
       className={cn(
-        'py-24 transition-colors duration-500',
+        'py-24 transition-colors duration-500 overflow-hidden',
         isDark ? 'bg-night-bg' : 'bg-day-bg'
       )}
     >
@@ -84,114 +215,37 @@ export function Projects() {
             Algunos de los proyectos en los que he trabajado
           </p>
         </motion.div>
+      </div>
 
-        {/* Projects grid */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className={cn(
-                'group relative rounded-2xl overflow-hidden transition-all duration-300',
-                isDark ? 'glass-night' : 'glass-day'
-              )}
-            >
-              {/* Image */}
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className={cn(
-                  'absolute inset-0 transition-opacity duration-300',
-                  isDark ? 'bg-gradient-to-t from-night-bg to-transparent' : 'bg-gradient-to-t from-day-bg to-transparent'
-                )} />
-                
-                {project.featured && (
-                  <div className="absolute top-4 left-4">
-                    <span className={cn(
-                      'px-3 py-1 rounded-full text-xs font-bold',
-                      isDark
-                        ? 'bg-day-primary text-night-bg'
-                        : 'bg-day-primary text-white'
-                    )}>
-                      Destacado
-                    </span>
-                  </div>
-                )}
-              </div>
+      {/* Carrusel infinito */}
+      <div className="relative">
+        {/* Gradiente izquierdo */}
+        <div className={cn(
+          'absolute left-0 top-0 bottom-0 w-32 z-10 pointer-events-none',
+          isDark 
+            ? 'bg-gradient-to-r from-night-bg to-transparent' 
+            : 'bg-gradient-to-r from-day-bg to-transparent'
+        )} />
 
-              {/* Content */}
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <Folder className="w-5 h-5 text-day-primary" />
-                    <h3 className={cn(
-                      'text-xl font-bold',
-                      isDark ? 'text-night-text' : 'text-day-text'
-                    )}>
-                      {project.title}
-                    </h3>
-                  </div>
-                </div>
+        {/* Gradiente derecho */}
+        <div className={cn(
+          'absolute right-0 top-0 bottom-0 w-32 z-10 pointer-events-none',
+          isDark 
+            ? 'bg-gradient-to-l from-night-bg to-transparent' 
+            : 'bg-gradient-to-l from-day-bg to-transparent'
+        )} />
 
-                <p className={cn(
-                  'mb-4 leading-relaxed',
-                  isDark ? 'text-night-text/80' : 'text-day-text/80'
-                )}>
-                  {project.description}
-                </p>
+        {/* Primera fila - movimiento hacia la izquierda */}
+        <div className="flex gap-6 mb-6 animate-scroll-left">
+          {duplicatedProjects.map((project, index) => (
+            <ProjectCard key={`row1-${index}`} project={project} index={index % projects.length} />
+          ))}
+        </div>
 
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className={cn(
-                        'px-3 py-1 rounded-lg text-xs font-medium',
-                        isDark
-                          ? 'bg-night-primary/20 text-night-primary'
-                          : 'bg-day-primary/20 text-day-primary'
-                      )}
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex gap-3">
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(
-                      'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
-                      isDark
-                        ? 'bg-night-primary/20 text-night-text hover:bg-night-primary/30'
-                        : 'bg-day-primary/20 text-day-text hover:bg-day-primary/30'
-                    )}
-                  >
-                    <GitHubIcon className="w-4 h-4" />
-                    Código
-                  </a>
-                  <a
-                    href={project.liveUrl}
-                    className={cn(
-                      'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
-                      isDark
-                        ? 'bg-day-primary text-night-bg hover:bg-night-accent'
-                        : 'bg-day-primary text-white hover:bg-day-accent'
-                    )}
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Ver demo
-                  </a>
-                </div>
-              </div>
-            </motion.div>
+        {/* Segunda fila - movimiento hacia la derecha */}
+        <div className="flex gap-6 animate-scroll-right">
+          {[...duplicatedProjects].reverse().map((project, index) => (
+            <ProjectCard key={`row2-${index}`} project={project} index={index % projects.length} />
           ))}
         </div>
       </div>
