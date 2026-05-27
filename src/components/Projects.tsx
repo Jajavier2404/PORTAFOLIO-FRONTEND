@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, ArrowRight } from 'lucide-react';
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -424,6 +424,30 @@ export function Projects() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Botón Ver más proyectos */}
+      <div className="flex justify-center mt-12 px-4">
+        <motion.a
+          href="https://github.com/jajavier2404"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className={cn(
+            'group flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300',
+            isDark
+              ? 'bg-day-primary/20 text-day-primary border-2 border-day-primary/50 hover:bg-day-primary hover:text-night-bg'
+              : 'bg-day-primary/10 text-day-primary border-2 border-day-primary/30 hover:bg-day-primary hover:text-white'
+          )}
+        >
+          <span>Ver más proyectos</span>
+          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+        </motion.a>
       </div>
     </section>
   );
