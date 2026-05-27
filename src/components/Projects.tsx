@@ -296,7 +296,7 @@ export function Projects() {
 
       {/* Mobile y Tablet - Carrusel 3D con cards laterales visibles */}
       <div 
-        className="lg:hidden relative"
+        className="lg:hidden relative w-full overflow-hidden"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -322,7 +322,7 @@ export function Projects() {
                 key={`${project.title}-${index}`}
                 initial={false}
                 animate={{
-                  x: diff * 320,
+                  x: diff * 300,
                   scale: isActive ? 1 : 0.85,
                   opacity: isActive ? 1 : 0.5,
                   zIndex: isActive ? 10 : 1,
@@ -333,7 +333,7 @@ export function Projects() {
                   damping: 30
                 }}
                 className={cn(
-                  'absolute w-[340px] sm:w-[420px] rounded-xl overflow-hidden cursor-pointer',
+                  'absolute w-[85vw] max-w-[360px] sm:max-w-[420px] rounded-xl overflow-hidden cursor-pointer',
                   isDark ? 'glass-night' : 'glass-day'
                 )}
                 onClick={() => {
@@ -458,9 +458,7 @@ export function Projects() {
       {/* Botón Ver más proyectos */}
       <div className="flex justify-center mt-10 px-4">
         <motion.a
-          href="https://github.com/jajavier2404"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/proyectos"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

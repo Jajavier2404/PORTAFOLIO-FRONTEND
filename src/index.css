@@ -30,6 +30,11 @@
   
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+  
+  body {
+    overflow-x: hidden;
   }
 }
 
@@ -55,22 +60,15 @@
   }
 }
 
-/* Scrollbar personalizada */
+/* Scrollbar oculta */
 ::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
+  width: 0px;
   background: transparent;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--color-day-primary);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-day-accent);
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 /* Animaciones del carrusel infinito - Desktop */
