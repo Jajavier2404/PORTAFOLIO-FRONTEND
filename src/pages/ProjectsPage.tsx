@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 import { motion } from 'framer-motion';
-import { ExternalLink, ArrowLeft, Github } from 'lucide-react';
+import { ExternalLink, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 function GitHubIcon({ className }: { className?: string }) {
@@ -116,10 +116,10 @@ export function ProjectsPage() {
 
   return (
     <div className={cn(
-      'min-h-screen pt-20 pb-16',
+      'min-h-screen pt-20 pb-16 overflow-x-hidden',
       isDark ? 'bg-night-bg' : 'bg-day-bg'
     )}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-hidden">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -158,7 +158,7 @@ export function ProjectsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap gap-3 mb-12"
+          className="flex flex-wrap gap-2 mb-12"
         >
           {categories.map((category) => (
             <button
@@ -181,19 +181,19 @@ export function ProjectsPage() {
         </motion.div>
 
         {/* Grid de proyectos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredProjects.map((project, index) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={cn(
-                'rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02]',
-                isDark ? 'glass-night' : 'glass-day'
-              )}
-            >
-              <div className="relative h-48 overflow-hidden">
+                className={cn(
+                  'rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] w-full',
+                  isDark ? 'glass-night' : 'glass-day'
+                )}
+              >
+                <div className="relative h-44 sm:h-48 overflow-hidden">
                 <img
                   src={project.image}
                   alt={project.title}
@@ -216,10 +216,10 @@ export function ProjectsPage() {
                 </div>
               </div>
 
-              <div className="p-5">
+              <div className="p-4 sm:p-5">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className={cn(
-                    'text-lg font-bold',
+                    'text-base sm:text-lg font-bold',
                     isDark ? 'text-night-text' : 'text-day-text'
                   )}>
                     {project.title}
@@ -233,18 +233,18 @@ export function ProjectsPage() {
                 </div>
                 
                 <p className={cn(
-                  'text-sm mb-4 line-clamp-2',
+                  'text-sm mb-3 sm:mb-4 line-clamp-2',
                   isDark ? 'text-night-text/70' : 'text-day-text/70'
                 )}>
                   {project.description}
                 </p>
                 
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                   {project.technologies.map((tech) => (
                     <span
                       key={tech}
                       className={cn(
-                        'px-2.5 py-1 rounded-lg text-xs font-medium',
+                        'px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-medium',
                         isDark
                           ? 'bg-night-primary/20 text-night-primary'
                           : 'bg-day-primary/20 text-day-primary'
@@ -255,31 +255,31 @@ export function ProjectsPage() {
                   ))}
                 </div>
                 
-                <div className="flex gap-3">
+                <div className="flex gap-2 sm:gap-3">
                   <a
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
-                      'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all flex-1 justify-center',
+                      'flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all flex-1 justify-center',
                       isDark
                         ? 'bg-night-primary/20 text-night-text hover:bg-night-primary/30'
                         : 'bg-day-primary/20 text-day-text hover:bg-day-primary/30'
                     )}
                   >
-                    <GitHubIcon className="w-4 h-4" />
+                    <GitHubIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     Código
                   </a>
                   <a
                     href={project.liveUrl}
                     className={cn(
-                      'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all flex-1 justify-center',
+                      'flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all flex-1 justify-center',
                       isDark
                         ? 'bg-day-primary text-night-bg hover:bg-night-accent'
                         : 'bg-day-primary text-white hover:bg-day-accent'
                     )}
                   >
-                    <ExternalLink className="w-4 h-4" />
+                    <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     Demo
                   </a>
                 </div>

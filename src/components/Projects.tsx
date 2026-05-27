@@ -229,11 +229,11 @@ export function Projects() {
     <section
       id="proyectos"
       className={cn(
-        'py-24 transition-colors duration-500 overflow-hidden',
+        'py-24 transition-colors duration-500 overflow-x-hidden',
         isDark ? 'bg-night-bg' : 'bg-day-bg'
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-hidden">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -259,7 +259,7 @@ export function Projects() {
 
       {/* Desktop - Dos filas infinitas */}
       <div 
-        className="hidden lg:block relative"
+        className="hidden lg:block relative overflow-hidden"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
@@ -300,8 +300,9 @@ export function Projects() {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        style={{ maxWidth: '100vw' }}
       >
-        <div className="relative flex items-center justify-center h-[540px] sm:h-[620px] overflow-hidden">
+        <div className="relative flex items-center justify-center h-[500px] sm:h-[580px] overflow-hidden" style={{ maxWidth: '100%' }}>
           {projects.map((project, index) => {
             // Calcular posición relativa al índice actual
             let diff = index - currentIndex;
@@ -315,16 +316,19 @@ export function Projects() {
             const isNext = diff === 1 || diff === -(projects.length - 1);
             const isVisible = isActive || isPrev || isNext;
             
-            if (!isVisible) return null;
+            // Solo mostrar cards que estén dentro del viewport
+            const isWithinViewport = Math.abs(diff) <= 1;
+            
+            if (!isVisible || !isWithinViewport) return null;
             
             return (
               <motion.div
                 key={`${project.title}-${index}`}
                 initial={false}
                 animate={{
-                  x: diff * 300,
-                  scale: isActive ? 1 : 0.85,
-                  opacity: isActive ? 1 : 0.5,
+                  x: diff * 180,
+                  scale: isActive ? 1 : 0.8,
+                  opacity: isActive ? 1 : 0.3,
                   zIndex: isActive ? 10 : 1,
                 }}
                 transition={{
@@ -333,7 +337,7 @@ export function Projects() {
                   damping: 30
                 }}
                 className={cn(
-                  'absolute w-[85vw] max-w-[360px] sm:max-w-[420px] rounded-xl overflow-hidden cursor-pointer',
+                  'absolute w-[70vw] max-w-[300px] sm:max-w-[340px] rounded-xl overflow-hidden cursor-pointer',
                   isDark ? 'glass-night' : 'glass-day'
                 )}
                 onClick={() => {
@@ -355,27 +359,27 @@ export function Projects() {
                   )} />
                 </div>
                 
-                <div className="p-5 sm:p-6">
+                <div className="p-4 sm:p-5">
                   <h3 className={cn(
-                    'text-lg sm:text-xl font-bold mb-2',
+                    'text-base sm:text-lg font-bold mb-1 sm:mb-2',
                     isDark ? 'text-night-text' : 'text-day-text'
                   )}>
                     {project.title}
                   </h3>
                   
                   <p className={cn(
-                    'text-sm mb-3 line-clamp-2',
+                    'text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2',
                     isDark ? 'text-night-text/70' : 'text-day-text/70'
                   )}>
                     {project.description}
                   </p>
                   
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                     {project.technologies.slice(0, 3).map((tech) => (
                       <span
                         key={tech}
                         className={cn(
-                          'px-2.5 py-1 rounded-lg text-xs font-medium',
+                          'px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-medium',
                           isDark
                             ? 'bg-night-primary/20 text-night-primary'
                             : 'bg-day-primary/20 text-day-primary'
@@ -387,31 +391,31 @@ export function Projects() {
                   </div>
                   
                   {isActive && (
-                    <div className="flex gap-3">
+                    <div className="flex gap-2 sm:gap-3">
                       <a
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={cn(
-                          'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                          'flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all',
                           isDark
                             ? 'bg-night-primary/20 text-night-text hover:bg-night-primary/30'
                             : 'bg-day-primary/20 text-day-text hover:bg-day-primary/30'
                         )}
                       >
-                        <GitHubIcon className="w-4 h-4" />
+                        <GitHubIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         Código
                       </a>
                       <a
                         href={project.liveUrl}
                         className={cn(
-                          'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                          'flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all',
                           isDark
                             ? 'bg-day-primary text-night-bg hover:bg-night-accent'
                             : 'bg-day-primary text-white hover:bg-day-accent'
                         )}
                       >
-                        <ExternalLink className="w-4 h-4" />
+                        <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         Demo
                       </a>
                     </div>
