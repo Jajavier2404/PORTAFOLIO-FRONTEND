@@ -1,9 +1,9 @@
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
-import { motion } from 'framer-motion';
-import { ExternalLink, Folder } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ExternalLink } from 'lucide-react';
 
-// Icono de GitHub como SVG
 function GitHubIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -15,130 +15,98 @@ function GitHubIcon({ className }: { className?: string }) {
 const projects = [
   {
     title: 'Sistema de Gestión con IA',
-    description: 'Plataforma de gestión empresarial integrada con modelos de lenguaje para automatización de tareas y análisis de datos.',
+    description: 'Plataforma de gestión empresarial integrada con modelos de lenguaje para automatización de tareas.',
     image: '/images/bg-day.png',
-    technologies: ['React', 'Node.js', 'OpenAI', 'PostgreSQL', 'Docker'],
+    technologies: ['React', 'Node.js', 'OpenAI', 'PostgreSQL'],
     githubUrl: 'https://github.com/jajavier2404',
     liveUrl: '#',
-    featured: true
   },
   {
     title: 'API de Microservicios',
-    description: 'Arquitectura de microservicios escalable con comunicación asíncrona, balanceo de carga y monitoreo en tiempo real.',
+    description: 'Arquitectura de microservicios escalable con comunicación asíncrona y monitoreo en tiempo real.',
     image: '/images/bg-night.png',
-    technologies: ['Node.js', 'Express', 'Redis', 'RabbitMQ', 'Kubernetes'],
+    technologies: ['Node.js', 'Express', 'Redis', 'RabbitMQ'],
     githubUrl: 'https://github.com/jajavier2404',
     liveUrl: '#',
-    featured: true
   },
   {
     title: 'Chatbot Inteligente',
-    description: 'Asistente virtual con procesamiento de lenguaje natural, memoria conversacional y personalización de respuestas.',
+    description: 'Asistente virtual con procesamiento de lenguaje natural y memoria conversacional.',
     image: '/images/bg-day.png',
-    technologies: ['Python', 'FastAPI', 'HuggingFace', 'MongoDB', 'React'],
+    technologies: ['Python', 'FastAPI', 'HuggingFace', 'React'],
     githubUrl: 'https://github.com/jajavier2404',
     liveUrl: '#',
-    featured: false
   },
   {
     title: 'Dashboard Analytics',
-    description: 'Panel de visualización de datos con gráficos interactivos, filtros dinámicos y exportación de reportes.',
+    description: 'Panel de visualización de datos con gráficos interactivos y filtros dinámicos.',
     image: '/images/bg-night.png',
     technologies: ['React', 'D3.js', 'TypeScript', 'TailwindCSS'],
     githubUrl: 'https://github.com/jajavier2404',
     liveUrl: '#',
-    featured: false
   },
   {
     title: 'E-commerce Platform',
-    description: 'Plataforma de comercio electrónico con pasarela de pagos, gestión de inventario y panel de administración.',
+    description: 'Plataforma de comercio electrónico con pasarela de pagos y gestión de inventario.',
     image: '/images/bg-day.png',
     technologies: ['Next.js', 'Stripe', 'Prisma', 'PostgreSQL'],
     githubUrl: 'https://github.com/jajavier2404',
     liveUrl: '#',
-    featured: false
   },
   {
     title: 'Real-time Chat App',
-    description: 'Aplicación de mensajería en tiempo real con WebSockets, notificaciones push y cifrado end-to-end.',
+    description: 'Aplicación de mensajería en tiempo real con WebSockets y cifrado end-to-end.',
     image: '/images/bg-night.png',
     technologies: ['Socket.io', 'Express', 'MongoDB', 'Redis'],
     githubUrl: 'https://github.com/jajavier2404',
     liveUrl: '#',
-    featured: false
   }
 ];
 
-// Duplicar proyectos para crear efecto infinito
-const duplicatedProjects = [...projects, ...projects, ...projects];
+// Triplicar para loop infinito suave
+const tripleProjects = [...projects, ...projects, ...projects];
 
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
-  const { isDark } = useTheme();
+const AUTOPLAY_INTERVAL = 8000;
 
+function ProjectCard({ project, isDark }: { project: typeof projects[0]; isDark: boolean }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className={cn(
-        'group relative rounded-2xl overflow-hidden transition-all duration-300 flex-shrink-0 w-[350px] md:w-[400px]',
-        isDark ? 'glass-night' : 'glass-day'
-      )}
-    >
-      {/* Image */}
-      <div className="relative h-48 overflow-hidden">
+    <div className={cn(
+      'w-[380px] flex-shrink-0 rounded-xl overflow-hidden transition-all duration-300',
+      isDark ? 'glass-night' : 'glass-day'
+    )}>
+      <div className="relative h-52 overflow-hidden">
         <img
           src={project.image}
           alt={project.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
         />
         <div className={cn(
-          'absolute inset-0 transition-opacity duration-300',
-          isDark ? 'bg-gradient-to-t from-night-bg to-transparent' : 'bg-gradient-to-t from-day-bg to-transparent'
+          'absolute inset-0 bg-gradient-to-t',
+          isDark ? 'from-night-bg' : 'from-day-bg'
         )} />
-        
-        {project.featured && (
-          <div className="absolute top-4 left-4">
-            <span className={cn(
-              'px-3 py-1 rounded-full text-xs font-bold',
-              isDark
-                ? 'bg-day-primary text-night-bg'
-                : 'bg-day-primary text-white'
-            )}>
-              Destacado
-            </span>
-          </div>
-        )}
       </div>
-
-      {/* Content */}
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-center gap-3">
-            <Folder className="w-5 h-5 text-day-primary" />
-            <h3 className={cn(
-              'text-xl font-bold',
-              isDark ? 'text-night-text' : 'text-day-text'
-            )}>
-              {project.title}
-            </h3>
-          </div>
-        </div>
-
+      
+      <div className="p-5">
+        <h3 className={cn(
+          'text-xl font-bold mb-2',
+          isDark ? 'text-night-text' : 'text-day-text'
+        )}>
+          {project.title}
+        </h3>
+        
         <p className={cn(
-          'mb-4 leading-relaxed text-sm',
-          isDark ? 'text-night-text/80' : 'text-day-text/80'
+          'text-sm mb-4 line-clamp-2',
+          isDark ? 'text-night-text/70' : 'text-day-text/70'
         )}>
           {project.description}
         </p>
-
-        <div className="flex flex-wrap gap-2 mb-6">
-          {project.technologies.slice(0, 4).map((tech) => (
+        
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.technologies.slice(0, 3).map((tech) => (
             <span
               key={tech}
               className={cn(
-                'px-3 py-1 rounded-lg text-xs font-medium',
+                'px-2.5 py-1 rounded-lg text-xs font-medium',
                 isDark
                   ? 'bg-night-primary/20 text-night-primary'
                   : 'bg-day-primary/20 text-day-primary'
@@ -148,7 +116,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             </span>
           ))}
         </div>
-
+        
         <div className="flex gap-3">
           <a
             href={project.githubUrl}
@@ -174,16 +142,88 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             )}
           >
             <ExternalLink className="w-4 h-4" />
-            Ver demo
+            Demo
           </a>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 export function Projects() {
   const { isDark } = useTheme();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const progressRef = useRef<number>(0);
+  const animationRef = useRef<number>();
+
+  const goToNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % projects.length);
+    setProgress(0);
+    progressRef.current = 0;
+  }, []);
+
+  const goToPrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
+    setProgress(0);
+    progressRef.current = 0;
+  }, []);
+
+  const goToSlide = useCallback((index: number) => {
+    setCurrentIndex(index);
+    setProgress(0);
+    progressRef.current = 0;
+  }, []);
+
+  // Animación del progreso
+  useEffect(() => {
+    if (isPaused) {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      return;
+    }
+
+    const startTime = Date.now();
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const newProgress = Math.min((elapsed / AUTOPLAY_INTERVAL) * 100, 100);
+      
+      setProgress(newProgress);
+      progressRef.current = newProgress;
+
+      if (newProgress >= 100) {
+        goToNext();
+      } else {
+        animationRef.current = requestAnimationFrame(animate);
+      }
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [currentIndex, isPaused, goToNext]);
+
+  // Touch handlers para mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 75) {
+      goToNext();
+    }
+    if (touchStart - touchEnd < -75) {
+      goToPrev();
+    }
+  };
 
   return (
     <section
@@ -194,13 +234,13 @@ export function Projects() {
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <h2 className={cn(
             'text-4xl font-bold mb-4',
@@ -217,8 +257,12 @@ export function Projects() {
         </motion.div>
       </div>
 
-      {/* Carrusel infinito */}
-      <div className="relative">
+      {/* Desktop - Dos filas infinitas */}
+      <div 
+        className="hidden lg:block relative"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
         {/* Gradiente izquierdo */}
         <div className={cn(
           'absolute left-0 top-0 bottom-0 w-32 z-10 pointer-events-none',
@@ -235,17 +279,149 @@ export function Projects() {
             : 'bg-gradient-to-l from-day-bg to-transparent'
         )} />
 
-        {/* Primera fila - movimiento hacia la izquierda */}
+        {/* Primera fila - izquierda */}
         <div className="flex gap-6 mb-6 animate-scroll-left">
-          {duplicatedProjects.map((project, index) => (
-            <ProjectCard key={`row1-${index}`} project={project} index={index % projects.length} />
+          {tripleProjects.map((project, index) => (
+            <ProjectCard key={`row1-${index}`} project={project} isDark={isDark} />
           ))}
         </div>
 
-        {/* Segunda fila - movimiento hacia la derecha */}
+        {/* Segunda fila - derecha */}
         <div className="flex gap-6 animate-scroll-right">
-          {[...duplicatedProjects].reverse().map((project, index) => (
-            <ProjectCard key={`row2-${index}`} project={project} index={index % projects.length} />
+          {[...tripleProjects].reverse().map((project, index) => (
+            <ProjectCard key={`row2-${index}`} project={project} isDark={isDark} />
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile - Carrusel unitario con indicadores mejorados */}
+      <div 
+        className="lg:hidden relative px-4 sm:px-8 md:px-16"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div className="overflow-hidden mx-auto max-w-sm sm:max-w-md md:max-w-lg">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ 
+                duration: 0.25,
+                ease: "easeInOut"
+              }}
+              className={cn(
+                'rounded-xl overflow-hidden',
+                isDark ? 'glass-night' : 'glass-day'
+              )}
+            >
+              <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
+                <img
+                  src={projects[currentIndex].image}
+                  alt={projects[currentIndex].title}
+                  className="w-full h-full object-cover"
+                />
+                <div className={cn(
+                  'absolute inset-0 bg-gradient-to-t',
+                  isDark ? 'from-night-bg' : 'from-day-bg'
+                )} />
+              </div>
+              
+              <div className="p-4 sm:p-5 md:p-6">
+                <h3 className={cn(
+                  'text-lg sm:text-xl font-bold mb-2',
+                  isDark ? 'text-night-text' : 'text-day-text'
+                )}>
+                  {projects[currentIndex].title}
+                </h3>
+                
+                <p className={cn(
+                  'text-sm sm:text-base mb-3 sm:mb-4',
+                  isDark ? 'text-night-text/70' : 'text-day-text/70'
+                )}>
+                  {projects[currentIndex].description}
+                </p>
+                
+                <div className="flex flex-wrap gap-2 mb-4 sm:mb-5">
+                  {projects[currentIndex].technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className={cn(
+                        'px-2.5 py-1 rounded-lg text-xs sm:text-sm font-medium',
+                        isDark
+                          ? 'bg-night-primary/20 text-night-primary'
+                          : 'bg-day-primary/20 text-day-primary'
+                      )}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                
+                <div className="flex gap-3">
+                  <a
+                    href={projects[currentIndex].githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                      isDark
+                        ? 'bg-night-primary/20 text-night-text hover:bg-night-primary/30'
+                        : 'bg-day-primary/20 text-day-text hover:bg-day-primary/30'
+                    )}
+                  >
+                    <GitHubIcon className="w-4 h-4" />
+                    Código
+                  </a>
+                  <a
+                    href={projects[currentIndex].liveUrl}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                      isDark
+                        ? 'bg-day-primary text-night-bg hover:bg-night-accent'
+                        : 'bg-day-primary text-white hover:bg-day-accent'
+                    )}
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Demo
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Indicadores tipo barras con relleno progresivo */}
+        <div className="flex justify-center items-center gap-2 mt-6 px-4">
+          {projects.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className="relative rounded-full overflow-hidden"
+              style={{
+                width: index === currentIndex ? '32px' : '8px',
+                height: '6px'
+              }}
+            >
+              {/* Fondo gris */}
+              <div className={cn(
+                'absolute inset-0 rounded-full',
+                isDark ? 'bg-gray-600' : 'bg-gray-300'
+              )} />
+              
+              {/* Relleno verde que crece */}
+              {index === currentIndex && (
+                <div 
+                  className="absolute inset-0 bg-day-primary rounded-full"
+                  style={{ 
+                    width: `${progress}%`,
+                    transition: 'width 0.1s linear'
+                  }}
+                />
+              )}
+            </button>
           ))}
         </div>
       </div>

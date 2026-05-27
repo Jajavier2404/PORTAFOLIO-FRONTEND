@@ -73,7 +73,7 @@
   background: var(--color-day-accent);
 }
 
-/* Animaciones del carrusel infinito */
+/* Animaciones del carrusel infinito - Desktop */
 @keyframes scroll-left {
   0% {
     transform: translateX(0);
@@ -93,13 +93,16 @@
 }
 
 .animate-scroll-left {
-  animation: scroll-left 40s linear infinite;
+  animation: scroll-left 35s linear infinite;
+  will-change: transform;
 }
 
 .animate-scroll-right {
-  animation: scroll-right 40s linear infinite;
+  animation: scroll-right 35s linear infinite;
+  will-change: transform;
 }
 
+/* Pausar al hover */
 .animate-scroll-left:hover,
 .animate-scroll-right:hover {
   animation-play-state: paused;
