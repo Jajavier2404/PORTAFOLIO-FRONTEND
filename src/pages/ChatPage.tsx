@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import { huggingFaceService } from '../services/huggingface';
+import { chatApiService } from '../services/chatApi';
 import { cn } from '../utils/cn';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Bot, User, Sparkles, Loader2 } from 'lucide-react';
@@ -12,19 +12,30 @@ interface Message {
   timestamp: Date;
 }
 
+// Generar sessionId único para el usuario
+const getSessionId = () => {
+  let sessionId = localStorage.getItem('chat_session_id');
+  if (!sessionId) {
+    sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem('chat_session_id', sessionId);
+  }
+  return sessionId;
+};
+
 export function ChatPage() {
   const { isDark } = useTheme();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
       role: 'assistant',
-      content: '¡Hola! Soy el asistente virtual de Javier. ¿En qué puedo ayudarte hoy? Puedes preguntarme sobre programación, tecnología, o simplemente charlar.',
+      content: '¡Hola! Soy Javier. ¿En qué puedo ayudarte hoy? Puedes preguntarme sobre mis proyectos, tecnologías, o simplemente charlar sobre desarrollo de software.',
       timestamp: new Date()
     }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const sessionId = useRef(getSessionId()).current;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -33,6 +44,28 @@ export function ChatPage() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Cargar historial al montar el componente
+  useEffect(() => {
+    const loadHistory = async () => {
+      try {
+        const history = await chatApiService.getChatHistory(sessionId);
+        if (history.length > 0) {
+          const formattedMessages = history.map((msg, index) => ({
+            id: `hist_${index}`,
+            role: msg.role,
+            content: msg.content,
+            timestamp: new Date()
+          }));
+          setMessages(prev => [...prev, ...formattedMessages]);
+        }
+      } catch (error) {
+        console.error('Error loading chat history:', error);
+      }
+    };
+
+    loadHistory();
+  }, [sessionId]);
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
@@ -49,22 +82,16 @@ export function ChatPage() {
     setIsLoading(true);
 
     try {
-      // Obtener historial para el contexto
-      const history = messages.map(m => ({
-        role: m.role,
-        content: m.content
-      }));
-
-      // Llamar al servicio de Hugging Face
-      const response = await huggingFaceService.sendMessage(
-        userMessage.content,
-        history
+      // Llamar al backend
+      const response = await chatApiService.sendMessage(
+        sessionId,
+        userMessage.content
       );
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: response,
+        content: response.content,
         timestamp: new Date()
       };
 
@@ -75,7 +102,7 @@ export function ChatPage() {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'Lo siento, hubo un error al procesar tu mensaje. Por favor, intenta de nuevo.',
+        content: 'Lo siento, estoy teniendo problemas técnicos en este momento. ¿Podrías intentar de nuevo en unos segundos?',
         timestamp: new Date()
       };
 
@@ -129,13 +156,13 @@ export function ChatPage() {
             'text-3xl font-bold',
             isDark ? 'text-night-text' : 'text-day-text'
           )}>
-            Habla con mi asistente virtual
+            Habla conmigo
           </h1>
           <p className={cn(
             'mt-2 text-sm',
             isDark ? 'text-night-text/70' : 'text-day-text/70'
           )}>
-            Impulsado por Hugging Face AI
+            Soy Javier, ingeniero de software. ¿En qué puedo ayudarte?
           </p>
         </motion.div>
 
