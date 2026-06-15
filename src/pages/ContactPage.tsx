@@ -189,58 +189,6 @@ export function ContactPage() {
           </div>
         </motion.div>
 
-        {/* Contact Channels Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16"
-        >
-          {channels.map((channel) => (
-            <motion.a
-              key={channel.label}
-              variants={itemVariants}
-              href={channel.href}
-              target={channel.external ? '_blank' : undefined}
-              rel={channel.external ? 'noopener noreferrer' : undefined}
-              className={cn(
-                'group flex flex-col items-center gap-3 p-8 rounded-2xl transition-all duration-300',
-                'hover:-translate-y-1 cursor-pointer',
-                isDark
-                  ? 'glass-night hover:bg-night-primary/10'
-                  : 'glass-day hover:bg-day-primary/5'
-              )}
-            >
-              <channel.icon
-                className={cn(
-                  'w-10 h-10 transition-colors duration-300',
-                  isDark
-                    ? 'text-night-text/80 group-hover:text-night-primary'
-                    : 'text-day-text/80 group-hover:text-day-primary'
-                )}
-              />
-              <span
-                className={cn(
-                  'text-lg font-semibold',
-                  isDark ? 'text-night-text' : 'text-day-text'
-                )}
-              >
-                {channel.label}
-              </span>
-              <span
-                className={cn(
-                  'text-sm font-medium transition-colors duration-300',
-                  isDark
-                    ? 'text-night-text/50 group-hover:text-night-primary'
-                    : 'text-day-text/50 group-hover:text-day-primary'
-                )}
-              >
-                {channel.desc} →
-              </span>
-            </motion.a>
-          ))}
-        </motion.div>
-
         {/* Two-column: Contact Info + Form */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           {/* Left: Contact Info */}
