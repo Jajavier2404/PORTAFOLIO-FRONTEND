@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ExternalLink, ArrowRight } from 'lucide-react';
 
 function GitHubIcon({ className }: { className?: string }) {
@@ -160,7 +160,7 @@ export function Projects() {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const progressRef = useRef<number>(0);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
 
   const goToNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % projects.length);

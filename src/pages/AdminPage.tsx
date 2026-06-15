@@ -8,7 +8,6 @@ import {
   MessageSquare, 
   Users, 
   TrendingUp, 
-  Clock, 
   Bot, 
   User, 
   Trash2,

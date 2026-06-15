@@ -11,6 +11,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  token: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
@@ -46,10 +47,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('portfolio-user');
   }, []);
 
+  const token = user ? `demo-token-${user.id}` : null;
+
   const value: AuthContextType = {
     user,
     isAuthenticated: user !== null,
     isAdmin: user?.role === 'admin',
+    token,
     login,
     logout
   };
