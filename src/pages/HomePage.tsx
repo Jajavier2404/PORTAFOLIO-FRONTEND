@@ -47,15 +47,25 @@ function AboutMe() {
           {/* Badge */}
           <div
             className={cn(
-              'inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-6',
+              'inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-4',
               isDark
                 ? 'bg-night-primary/20 text-night-primary'
                 : 'bg-day-primary/15 text-day-primary'
             )}
           >
             <User className="w-4 h-4" />
-            Sobre mí
+            Ingeniero de Software
           </div>
+
+          {/* Title */}
+          <h2
+            className={cn(
+              'text-2xl md:text-3xl font-bold mb-6',
+              isDark ? 'text-night-text' : 'text-day-text'
+            )}
+          >
+            Sobre mí
+          </h2>
 
           {/* Description */}
           <p
