@@ -63,8 +63,9 @@ const projects = [
   }
 ];
 
-const desktopTopRow = projects.slice(0, 5);
-const desktopBottomRow = projects.slice(1, 6);
+const desktopSplitIndex = Math.ceil(projects.length / 2);
+const desktopTopRow = projects.slice(0, desktopSplitIndex);
+const desktopBottomRow = projects.slice(desktopSplitIndex);
 
 const AUTOPLAY_INTERVAL = 8000;
 
@@ -154,7 +155,7 @@ export function Projects() {
   const { isDark } = useTheme();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isDesktopPaused, setIsDesktopPaused] = useState(false);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const progressRef = useRef<number>(0);
@@ -180,11 +181,6 @@ export function Projects() {
 
   // Animación del progreso
   useEffect(() => {
-    if (isPaused) {
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
-      return;
-    }
-
     const startTime = Date.now();
     const animate = () => {
       const elapsed = Date.now() - startTime;
@@ -205,7 +201,7 @@ export function Projects() {
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [currentIndex, isPaused, goToNext]);
+  }, [currentIndex, goToNext]);
 
   // Touch handlers para mobile
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -260,13 +256,20 @@ export function Projects() {
       {/* Desktop - Dos filas simultáneas de 5 cards */}
       <div
         className="hidden lg:block space-y-6 px-4 xl:px-6"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
+        onMouseEnter={() => setIsDesktopPaused(true)}
+        onMouseLeave={() => setIsDesktopPaused(false)}
       >
         <div className="overflow-hidden rounded-2xl">
-          <div className={cn('flex', !isPaused && 'animate-scroll-left')}>
+          <div
+            className="flex animate-scroll-left"
+            style={{ animationPlayState: isDesktopPaused ? 'paused' : 'running' }}
+          >
             {[0, 1].map((setIndex) => (
-              <div key={`top-set-${setIndex}`} className="grid min-w-full shrink-0 grid-cols-5 gap-4 xl:gap-5">
+              <div
+                key={`top-set-${setIndex}`}
+                className="grid min-w-full shrink-0 gap-4 xl:gap-5"
+                style={{ gridTemplateColumns: `repeat(${desktopTopRow.length}, minmax(0, 1fr))` }}
+              >
                 {desktopTopRow.map((project, index) => (
                   <ProjectCard key={`top-${setIndex}-${index}-${project.title}`} project={project} isDark={isDark} />
                 ))}
@@ -276,9 +279,16 @@ export function Projects() {
         </div>
 
         <div className="overflow-hidden rounded-2xl">
-          <div className={cn('flex', !isPaused && 'animate-scroll-right')}>
+          <div
+            className="flex animate-scroll-right"
+            style={{ animationPlayState: isDesktopPaused ? 'paused' : 'running' }}
+          >
             {[0, 1].map((setIndex) => (
-              <div key={`bottom-set-${setIndex}`} className="grid min-w-full shrink-0 grid-cols-5 gap-4 xl:gap-5">
+              <div
+                key={`bottom-set-${setIndex}`}
+                className="grid min-w-full shrink-0 gap-4 xl:gap-5"
+                style={{ gridTemplateColumns: `repeat(${desktopBottomRow.length}, minmax(0, 1fr))` }}
+              >
                 {desktopBottomRow.map((project, index) => (
                   <ProjectCard key={`bottom-${setIndex}-${index}-${project.title}`} project={project} isDark={isDark} />
                 ))}
