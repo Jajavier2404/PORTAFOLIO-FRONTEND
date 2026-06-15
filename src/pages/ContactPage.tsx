@@ -228,7 +228,7 @@ export function ContactPage() {
             {/* Info badges */}
             <div className={cn(
               'p-4 rounded-xl',
-              isDark ? 'bg-night-bg/40 border border-night-border/30' : 'bg-day-bg/40 border border-day-border/30'
+              isDark ? 'bg-night-card' : 'bg-day-card'
             )}>
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-3">
