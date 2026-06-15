@@ -9,11 +9,7 @@ import {
   MapPin,
   ArrowLeft,
   ChevronDown,
-  Award,
-  Code2,
-  Server,
-  Database,
-  Cloud
+  Award
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -66,15 +62,66 @@ const educationData = [
   }
 ];
 
-const skillsData = [
-  { name: 'React / Next.js', level: 90, category: 'frontend' },
-  { name: 'TypeScript', level: 85, category: 'frontend' },
-  { name: 'Node.js / Express', level: 85, category: 'backend' },
-  { name: 'Python', level: 70, category: 'backend' },
-  { name: 'PostgreSQL / MongoDB', level: 75, category: 'database' },
-  { name: 'Docker / AWS', level: 70, category: 'devops' },
-  { name: 'Git / CI/CD', level: 80, category: 'devops' },
-  { name: 'Framer Motion / Animations', level: 75, category: 'frontend' }
+const techStackData = [
+  {
+    title: 'Languages',
+    items: [
+      { name: 'Python', tone: 'bg-blue-500/20 text-blue-200 border-blue-400/30' },
+      { name: 'Java', tone: 'bg-amber-500/20 text-amber-200 border-amber-400/30' },
+      { name: 'C#', tone: 'bg-violet-500/20 text-violet-200 border-violet-400/30' },
+      { name: 'JavaScript', tone: 'bg-yellow-400/20 text-yellow-100 border-yellow-300/30' },
+      { name: 'TypeScript', tone: 'bg-sky-500/20 text-sky-100 border-sky-400/30' },
+      { name: 'HTML5', tone: 'bg-orange-500/20 text-orange-100 border-orange-400/30' },
+      { name: 'CSS3', tone: 'bg-blue-600/20 text-blue-100 border-blue-400/30' }
+    ]
+  },
+  {
+    title: 'Backend & Architecture',
+    items: [
+      { name: 'NestJS', tone: 'bg-rose-500/20 text-rose-100 border-rose-400/30' },
+      { name: 'Node.js', tone: 'bg-green-500/20 text-green-100 border-green-400/30' },
+      { name: 'Express', tone: 'bg-zinc-500/20 text-zinc-100 border-zinc-400/30' },
+      { name: 'gRPC', tone: 'bg-slate-500/20 text-slate-100 border-slate-400/30' }
+    ]
+  },
+  {
+    title: 'Frontend',
+    items: [
+      { name: 'React', tone: 'bg-cyan-500/20 text-cyan-100 border-cyan-400/30' },
+      { name: 'Next.js', tone: 'bg-zinc-500/20 text-zinc-100 border-zinc-400/30' },
+      { name: 'React Native', tone: 'bg-sky-500/20 text-sky-100 border-sky-400/30' },
+      { name: 'Tailwind CSS', tone: 'bg-teal-500/20 text-teal-100 border-teal-400/30' }
+    ]
+  },
+  {
+    title: 'Data & Infrastructure',
+    items: [
+      { name: 'PostgreSQL', tone: 'bg-indigo-500/20 text-indigo-100 border-indigo-400/30' },
+      { name: 'Redis', tone: 'bg-red-500/20 text-red-100 border-red-400/30' },
+      { name: 'Prisma', tone: 'bg-slate-600/20 text-slate-100 border-slate-400/30' },
+      { name: 'MySQL', tone: 'bg-blue-500/20 text-blue-100 border-blue-300/30' },
+      { name: 'Docker', tone: 'bg-sky-600/20 text-sky-100 border-sky-400/30' },
+      { name: 'GitHub Actions', tone: 'bg-blue-500/20 text-blue-100 border-blue-300/30' }
+    ]
+  },
+  {
+    title: 'AI & MCP',
+    items: [
+      { name: 'OpenAI API', tone: 'bg-violet-500/20 text-violet-100 border-violet-400/30' },
+      { name: 'Anthropic API', tone: 'bg-amber-500/20 text-amber-100 border-amber-400/30' },
+      { name: 'MCP Orchestration', tone: 'bg-emerald-500/20 text-emerald-100 border-emerald-400/30' }
+    ]
+  },
+  {
+    title: 'Tools & Platforms',
+    items: [
+      { name: 'Amazon AWS', tone: 'bg-slate-500/20 text-slate-100 border-slate-300/30' },
+      { name: 'Parrot OS', tone: 'bg-teal-500/20 text-teal-100 border-teal-400/30' },
+      { name: 'Git', tone: 'bg-orange-500/20 text-orange-100 border-orange-400/30' },
+      { name: 'Arduino', tone: 'bg-cyan-500/20 text-cyan-100 border-cyan-400/30' },
+      { name: 'XAMPP', tone: 'bg-orange-400/20 text-orange-100 border-orange-300/30' }
+    ]
+  }
 ];
 
 const statsData = [
@@ -83,13 +130,6 @@ const statsData = [
   { label: 'Tecnologías dominadas', value: '15+' },
   { label: 'Certificaciones', value: '5' }
 ];
-
-const categoryLabels: Record<string, string> = {
-  frontend: 'Frontend',
-  backend: 'Backend',
-  database: 'Bases de Datos',
-  devops: 'DevOps'
-};
 
 const staggerItem = {
   hidden: { opacity: 0, y: 24 },
@@ -103,15 +143,12 @@ const staggerItem = {
 export function ExperiencePage() {
   const { isDark } = useTheme();
   const [expandedId, setExpandedId] = useState<number | null>(null);
-  const [skillsReady, setSkillsReady] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
 
   useEffect(() => {
     const t1 = setTimeout(() => setPageLoaded(true), 100);
-    const t2 = setTimeout(() => setSkillsReady(true), 400);
     return () => {
       clearTimeout(t1);
-      clearTimeout(t2);
     };
   }, []);
 
@@ -465,48 +502,57 @@ export function ExperiencePage() {
 
             <div
               className={cn(
-                'p-6 rounded-2xl',
-                isDark ? 'glass-night' : 'glass-day'
+                'p-6 sm:p-8 rounded-2xl border',
+                isDark ? 'glass-night border-night-border/50' : 'glass-day border-day-border/50'
               )}
             >
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {skillsData.map((skill, i) => (
+              <div className={cn(
+                'flex items-center justify-between gap-4 pb-4 mb-6 border-b',
+                isDark ? 'border-night-border/50' : 'border-day-border/50'
+              )}>
+                <h4 className={cn(
+                  'text-2xl font-bold',
+                  isDark ? 'text-night-text' : 'text-day-text'
+                )}>
+                  Tech Stack
+                </h4>
+                <span className={cn(
+                  'text-xs uppercase tracking-[0.24em] font-semibold',
+                  isDark ? 'text-night-text/40' : 'text-day-text/40'
+                )}>
+                  Current Stack
+                </span>
+              </div>
+
+              <div className="space-y-8">
+                {techStackData.map((section, sectionIndex) => (
                   <motion.div
-                    key={skill.name}
+                    key={section.title}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.3 + i * 0.06 }}
-                    className={cn(
-                      'flex items-center gap-3 p-3 rounded-xl transition-colors',
-                      isDark ? 'bg-night-bg/50 hover:bg-night-primary/10' : 'bg-day-bg/50 hover:bg-day-primary/10'
-                    )}
+                    transition={{ duration: 0.4, delay: 0.24 + sectionIndex * 0.08 }}
+                    className="space-y-3"
                   >
-                    <div
-                      className={cn(
-                        'p-2 rounded-lg shrink-0',
-                        skill.category === 'frontend'
-                          ? 'bg-blue-500/20 text-blue-500'
-                          : skill.category === 'backend'
-                            ? 'bg-green-500/20 text-green-500'
-                            : skill.category === 'database'
-                              ? 'bg-purple-500/20 text-purple-500'
-                              : 'bg-orange-500/20 text-orange-500'
-                      )}
-                    >
-                      {skill.category === 'frontend' && <Code2 className="w-5 h-5" />}
-                      {skill.category === 'backend' && <Server className="w-5 h-5" />}
-                      {skill.category === 'database' && <Database className="w-5 h-5" />}
-                      {skill.category === 'devops' && <Cloud className="w-5 h-5" />}
-                    </div>
-                    <div>
-                      <span
-                        className={cn(
-                          'text-sm font-semibold',
-                          isDark ? 'text-night-text' : 'text-day-text'
-                        )}
-                      >
-                        {skill.name}
-                      </span>
+                    <h5 className={cn(
+                      'text-base sm:text-lg font-semibold text-center',
+                      isDark ? 'text-night-text/80' : 'text-day-text/80'
+                    )}>
+                      {section.title}
+                    </h5>
+
+                    <div className="flex flex-wrap items-center justify-center gap-2.5">
+                      {section.items.map((item) => (
+                        <span
+                          key={item.name}
+                          className={cn(
+                            'inline-flex items-center rounded-md border px-3 py-2 text-[11px] sm:text-xs font-bold uppercase tracking-[0.18em] transition-transform duration-300 hover:-translate-y-0.5',
+                            item.tone,
+                            isDark ? 'bg-opacity-100' : 'text-opacity-90'
+                          )}
+                        >
+                          {item.name}
+                        </span>
+                      ))}
                     </div>
                   </motion.div>
                 ))}
