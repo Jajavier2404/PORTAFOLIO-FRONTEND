@@ -7,10 +7,10 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navLinks = [
-  { href: '/#inicio', label: 'Inicio' },
-  { href: '/#experiencia', label: 'Experiencia' },
-  { href: '/#proyectos', label: 'Proyectos' },
-  { href: '/#contacto', label: 'Contacto' },
+  { href: '/', label: 'Inicio' },
+  { href: '/experiencia', label: 'Experiencia' },
+  { href: '/proyectos', label: 'Proyectos' },
+  { href: '/contacto', label: 'Contacto' },
   { href: '/chat', label: 'Chat IA', icon: MessageSquare },
 ];
 
@@ -30,17 +30,6 @@ export function Navbar() {
       document.body.style.overflow = 'unset';
     };
   }, [mobileMenuOpen]);
-
-  const scrollToSection = (href: string) => {
-    setMobileMenuOpen(false);
-    if (href.startsWith('/#')) {
-      const id = href.replace('/#', '');
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
 
   return (
     <>
@@ -69,7 +58,6 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   to={link.href}
-                  onClick={() => scrollToSection(link.href)}
                   className={cn(
                     'px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300',
                     isDark
@@ -200,7 +188,7 @@ export function Navbar() {
                   >
                     <Link
                       to={link.href}
-                      onClick={() => scrollToSection(link.href)}
+                      onClick={() => setMobileMenuOpen(false)}
                       className={cn(
                         'flex items-center gap-3 text-2xl font-medium transition-all duration-300',
                         isDark
