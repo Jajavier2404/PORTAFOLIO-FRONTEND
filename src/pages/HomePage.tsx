@@ -60,7 +60,7 @@ function AboutMe() {
           {/* Title */}
           <h2
             className={cn(
-              'text-2xl md:text-3xl font-bold mb-6',
+              'text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-none mb-6',
               isDark ? 'text-night-text' : 'text-day-text'
             )}
           >
