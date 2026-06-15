@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 import { motion } from 'framer-motion';
-import { Mail, FileText, ArrowLeft, ArrowRight, CheckCircle, Loader2, AlertCircle, Clock, MapPin, Briefcase } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Mail, FileText, ArrowRight, CheckCircle, Loader2, AlertCircle, Clock, MapPin, Briefcase } from 'lucide-react';
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -126,29 +125,8 @@ export function ContactPage() {
         }}
       />
 
-      <div className="min-h-[calc(100vh-5rem)] flex items-center">
+      <div className="min-h-[calc(100vh-5rem)] pt-8 lg:pt-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative">
-        {/* Back link */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="mb-8"
-        >
-          <Link
-            to="/"
-            className={cn(
-              'inline-flex items-center gap-2 text-sm font-medium transition-colors',
-              isDark
-                ? 'text-night-text/60 hover:text-night-text'
-                : 'text-day-text/60 hover:text-day-text'
-            )}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Volver al inicio
-          </Link>
-        </motion.div>
-
         {/* Hero */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
