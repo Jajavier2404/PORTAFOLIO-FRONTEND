@@ -116,9 +116,32 @@ export function ProjectsPage() {
 
   return (
     <div className={cn(
-      'min-h-screen pt-20 pb-16 overflow-x-hidden',
+      'min-h-screen pt-20 pb-16 overflow-x-hidden relative',
       isDark ? 'bg-night-bg' : 'bg-day-bg'
     )}>
+      {/* Geometric pattern overlay */}
+      <div
+        className={cn(
+          'fixed inset-0 pointer-events-none opacity-[0.03]',
+          isDark ? 'opacity-[0.04]' : ''
+        )}
+        style={{
+          backgroundImage: `
+            linear-gradient(30deg, var(--color-day-primary) 12%, transparent 12.5%,
+            transparent 87%, var(--color-day-primary) 87.5%),
+            linear-gradient(150deg, var(--color-day-primary) 12%, transparent 12.5%,
+            transparent 87%, var(--color-day-primary) 87.5%),
+            linear-gradient(30deg, var(--color-day-primary) 12%, transparent 12.5%,
+            transparent 87%, var(--color-day-primary) 87.5%),
+            linear-gradient(150deg, var(--color-day-primary) 12%, transparent 12.5%,
+            transparent 87%, var(--color-day-primary) 87.5%),
+            linear-gradient(60deg, var(--color-day-primary) 25%, transparent 25.5%,
+            transparent 75%, var(--color-day-primary) 75%)
+          `,
+          backgroundSize: '80px 140px',
+          backgroundPosition: '0 0, 0 0, 40px 70px, 40px 70px, 0 0'
+        }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-hidden">
         {/* Header */}
         <motion.div
