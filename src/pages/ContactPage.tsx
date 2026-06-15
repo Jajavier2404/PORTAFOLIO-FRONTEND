@@ -54,25 +54,6 @@ export function ContactPage() {
     setIsSubmitting(false);
   };
 
-  const containerVariants = {
-    hidden: {},
-    show: {
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 24 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: 'easeOut' },
-    },
-  };
-
   const channels = [
     {
       icon: Mail,
@@ -260,203 +241,228 @@ export function ContactPage() {
           ))}
         </motion.div>
 
-        {/* Divider */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="flex items-center gap-4 mb-10"
-        >
-          <div
-            className={cn(
-              'flex-1 h-px',
-              isDark ? 'bg-night-border' : 'bg-day-border'
-            )}
-          />
-          <span
-            className={cn(
-              'text-sm font-medium shrink-0',
-              isDark ? 'text-night-text/40' : 'text-day-text/40'
-            )}
-          >
-            O escribime directo
-          </span>
-          <div
-            className={cn(
-              'flex-1 h-px',
-              isDark ? 'bg-night-border' : 'bg-day-border'
-            )}
-          />
-        </motion.div>
-
-        {/* Compact Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="max-w-lg mx-auto"
-        >
-          <form onSubmit={handleSubmit} className="space-y-8 mb-16">
-            <div>
-              <label
-                htmlFor="name"
-                className={cn(
-                  'block text-sm font-medium mb-2',
-                  isDark ? 'text-night-text/80' : 'text-day-text/80'
-                )}
-              >
-                Tu nombre
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                placeholder="¿Cómo te llamás?"
-                className={cn(
-                  'w-full px-4 py-3 rounded-xl border-2 outline-none transition-all duration-300',
-                  isDark
-                    ? 'bg-night-bg/50 border-night-border text-night-text placeholder:text-night-text/40 focus:border-night-primary'
-                    : 'bg-day-bg/50 border-day-border text-day-text placeholder:text-day-text/40 focus:border-day-primary'
-                )}
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className={cn(
-                  'block text-sm font-medium mb-2',
-                  isDark ? 'text-night-text/80' : 'text-day-text/80'
-                )}
-              >
-                Tu email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                placeholder="tu@email.com"
-                className={cn(
-                  'w-full px-4 py-3 rounded-xl border-2 outline-none transition-all duration-300',
-                  isDark
-                    ? 'bg-night-bg/50 border-night-border text-night-text placeholder:text-night-text/40 focus:border-night-primary'
-                    : 'bg-day-bg/50 border-day-border text-day-text placeholder:text-day-text/40 focus:border-day-primary'
-                )}
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="message"
-                className={cn(
-                  'block text-sm font-medium mb-2',
-                  isDark ? 'text-night-text/80' : 'text-day-text/80'
-                )}
-              >
-                Mensaje
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                rows={4}
-                placeholder="Contame sobre tu proyecto..."
-                className={cn(
-                  'w-full px-4 py-3 rounded-xl border-2 outline-none transition-all duration-300 resize-none',
-                  isDark
-                    ? 'bg-night-bg/50 border-night-border text-night-text placeholder:text-night-text/40 focus:border-night-primary'
-                    : 'bg-day-bg/50 border-day-border text-day-text placeholder:text-day-text/40 focus:border-day-primary'
-                )}
-              />
-            </div>
-
-            {status === 'success' && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 p-4 rounded-xl bg-green-500/10 text-green-600 dark:text-green-400 text-sm"
-              >
-                <CheckCircle className="w-5 h-5 shrink-0" />
-                ¡Mensaje enviado con éxito! Te responderé pronto.
-              </motion.div>
-            )}
-
-            {status === 'error' && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 p-4 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 text-sm"
-              >
-                <AlertCircle className="w-5 h-5 shrink-0" />
-                Hubo un error al enviar el mensaje. Intenta de nuevo.
-              </motion.div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={cn(
-                'w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-base transition-all duration-300',
-                'disabled:opacity-50 disabled:cursor-not-allowed',
-                isDark
-                  ? 'bg-day-primary text-night-bg hover:bg-night-accent'
-                  : 'bg-day-primary text-white hover:bg-day-accent'
-              )}
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Enviando...
-                </>
-              ) : (
-                <>
-                  Enviar mensaje
-                  <ArrowRight className="w-5 h-5" />
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Info badges */}
+        {/* Two-column: Contact Info + Form */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+          {/* Left: Contact Info */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-            className={cn(
-              'p-4 sm:p-5 rounded-xl text-center',
-              isDark ? 'bg-night-bg/40 border border-night-border/30' : 'bg-day-bg/40 border border-day-border/30'
-            )}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="space-y-6"
           >
-            <div className="flex items-center justify-center gap-5 sm:gap-10 flex-wrap">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-day-primary" />
-                <span className={cn('text-xs sm:text-sm', isDark ? 'text-night-text/60' : 'text-day-text/60')}>
-                  Respondo en menos de 24hs
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-day-primary" />
-                <span className={cn('text-xs sm:text-sm', isDark ? 'text-night-text/60' : 'text-day-text/60')}>
-                  Colombia · GMT-5
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-day-primary" />
-                <span className={cn('text-xs sm:text-sm', isDark ? 'text-night-text/60' : 'text-day-text/60')}>
-                  Freelance · Remoto
-                </span>
+            <h3 className={cn(
+              'text-xl font-semibold text-center lg:text-left',
+              isDark ? 'text-night-text' : 'text-day-text'
+            )}>
+              O escribime directo
+            </h3>
+
+            {/* Channels Grid - 2x2 */}
+            <div className="grid grid-cols-2 gap-4">
+              {channels.map((channel) => (
+                <motion.a
+                  key={channel.label}
+                  href={channel.href}
+                  target={channel.external ? '_blank' : undefined}
+                  rel={channel.external ? 'noopener noreferrer' : undefined}
+                  className={cn(
+                    'group flex flex-col items-center gap-2 p-5 rounded-2xl transition-all duration-300',
+                    'hover:-translate-y-1 cursor-pointer',
+                    isDark
+                      ? 'glass-night hover:bg-night-primary/10'
+                      : 'glass-day hover:bg-day-primary/5'
+                  )}
+                >
+                  <channel.icon
+                    className={cn(
+                      'w-8 h-8 transition-colors duration-300',
+                      isDark
+                        ? 'text-night-text/80 group-hover:text-night-primary'
+                        : 'text-day-text/80 group-hover:text-day-primary'
+                    )}
+                  />
+                  <span className={cn(
+                    'font-semibold text-sm',
+                    isDark ? 'text-night-text' : 'text-day-text'
+                  )}>
+                    {channel.label}
+                  </span>
+                  <span className={cn(
+                    'text-xs transition-colors duration-300',
+                    isDark
+                      ? 'text-night-text/50 group-hover:text-night-primary'
+                      : 'text-day-text/50 group-hover:text-day-primary'
+                  )}>
+                    {channel.desc} →
+                  </span>
+                </motion.a>
+              ))}
+            </div>
+
+            {/* Info badges */}
+            <div className={cn(
+              'p-4 rounded-xl',
+              isDark ? 'bg-night-bg/40 border border-night-border/30' : 'bg-day-bg/40 border border-day-border/30'
+            )}>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  <Clock className="w-4 h-4 text-day-primary shrink-0" />
+                  <span className={cn('text-sm', isDark ? 'text-night-text/60' : 'text-day-text/60')}>
+                    Respondo en menos de 24hs
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <MapPin className="w-4 h-4 text-day-primary shrink-0" />
+                  <span className={cn('text-sm', isDark ? 'text-night-text/60' : 'text-day-text/60')}>
+                    Colombia · GMT-5
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Briefcase className="w-4 h-4 text-day-primary shrink-0" />
+                  <span className={cn('text-sm', isDark ? 'text-night-text/60' : 'text-day-text/60')}>
+                    Freelance · Remoto
+                  </span>
+                </div>
               </div>
             </div>
           </motion.div>
-        </motion.div>
+
+          {/* Right: Form */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label
+                  htmlFor="name"
+                  className={cn(
+                    'block text-sm font-medium mb-2',
+                    isDark ? 'text-night-text/80' : 'text-day-text/80'
+                  )}
+                >
+                  Tu nombre
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="¿Cómo te llamás?"
+                  className={cn(
+                    'w-full px-4 py-3 rounded-xl border-2 outline-none transition-all duration-300',
+                    isDark
+                      ? 'bg-night-bg/50 border-night-border text-night-text placeholder:text-night-text/40 focus:border-night-primary'
+                      : 'bg-day-bg/50 border-day-border text-day-text placeholder:text-day-text/40 focus:border-day-primary'
+                  )}
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className={cn(
+                    'block text-sm font-medium mb-2',
+                    isDark ? 'text-night-text/80' : 'text-day-text/80'
+                  )}
+                >
+                  Tu email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  placeholder="tu@email.com"
+                  className={cn(
+                    'w-full px-4 py-3 rounded-xl border-2 outline-none transition-all duration-300',
+                    isDark
+                      ? 'bg-night-bg/50 border-night-border text-night-text placeholder:text-night-text/40 focus:border-night-primary'
+                      : 'bg-day-bg/50 border-day-border text-day-text placeholder:text-day-text/40 focus:border-day-primary'
+                  )}
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="message"
+                  className={cn(
+                    'block text-sm font-medium mb-2',
+                    isDark ? 'text-night-text/80' : 'text-day-text/80'
+                  )}
+                >
+                  Mensaje
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  rows={4}
+                  placeholder="Contame sobre tu proyecto..."
+                  className={cn(
+                    'w-full px-4 py-3 rounded-xl border-2 outline-none transition-all duration-300 resize-none',
+                    isDark
+                      ? 'bg-night-bg/50 border-night-border text-night-text placeholder:text-night-text/40 focus:border-night-primary'
+                      : 'bg-day-bg/50 border-day-border text-day-text placeholder:text-day-text/40 focus:border-day-primary'
+                  )}
+                />
+              </div>
+
+              {status === 'success' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-2 p-4 rounded-xl bg-green-500/10 text-green-600 dark:text-green-400 text-sm"
+                >
+                  <CheckCircle className="w-5 h-5 shrink-0" />
+                  ¡Mensaje enviado con éxito! Te responderé pronto.
+                </motion.div>
+              )}
+
+              {status === 'error' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-2 p-4 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 text-sm"
+                >
+                  <AlertCircle className="w-5 h-5 shrink-0" />
+                  Hubo un error al enviar el mensaje. Intenta de nuevo.
+                </motion.div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={cn(
+                  'w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-base transition-all duration-300',
+                  'disabled:opacity-50 disabled:cursor-not-allowed',
+                  isDark
+                    ? 'bg-day-primary text-night-bg hover:bg-night-accent'
+                    : 'bg-day-primary text-white hover:bg-day-accent'
+                )}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Enviando...
+                  </>
+                ) : (
+                  <>
+                    Enviar mensaje
+                    <ArrowRight className="w-5 h-5" />
+                  </>
+                )}
+              </button>
+            </form>
+          </motion.div>
+        </div>
       </div>
       </div>
     </div>
