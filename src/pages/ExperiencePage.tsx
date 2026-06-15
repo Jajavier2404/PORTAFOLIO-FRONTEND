@@ -9,7 +9,13 @@ import {
   MapPin,
   ArrowLeft,
   ChevronDown,
-  Award
+  Award,
+  Code2,
+  Server,
+  Monitor,
+  Database,
+  Bot,
+  Wrench
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -62,31 +68,19 @@ const educationData = [
   }
 ];
 
-const techStackData = [
-  {
-    title: 'Languages',
-    items: ['Python', 'Java', 'C#', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3']
-  },
-  {
-    title: 'Backend & Architecture',
-    items: ['NestJS', 'Node.js', 'Express', 'gRPC']
-  },
-  {
-    title: 'Frontend',
-    items: ['React', 'Next.js', 'React Native', 'Tailwind CSS']
-  },
-  {
-    title: 'Data & Infrastructure',
-    items: ['PostgreSQL', 'Redis', 'Prisma', 'MySQL', 'Docker', 'GitHub Actions']
-  },
-  {
-    title: 'AI & MCP',
-    items: ['OpenAI API', 'Anthropic API', 'MCP Orchestration']
-  },
-  {
-    title: 'Tools & Platforms',
-    items: ['Amazon AWS', 'Parrot OS', 'Git', 'Arduino', 'XAMPP']
-  }
+interface TechSection {
+  title: string;
+  icon: React.ComponentType<{ className?: string }>;
+  items: string[];
+}
+
+const techStackData: TechSection[] = [
+  { title: 'Languages', icon: Code2, items: ['Python', 'Java', 'C#', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3'] },
+  { title: 'Backend & Architecture', icon: Server, items: ['NestJS', 'Node.js', 'Express', 'gRPC'] },
+  { title: 'Frontend', icon: Monitor, items: ['React', 'Next.js', 'React Native', 'Tailwind CSS'] },
+  { title: 'Data & Infrastructure', icon: Database, items: ['PostgreSQL', 'Redis', 'Prisma', 'MySQL', 'Docker', 'GitHub Actions'] },
+  { title: 'AI & MCP', icon: Bot, items: ['OpenAI API', 'Anthropic API', 'MCP Orchestration'] },
+  { title: 'Tools & Platforms', icon: Wrench, items: ['Amazon AWS', 'Parrot OS', 'Git', 'Arduino', 'XAMPP'] }
 ];
 
 const statsData = [
@@ -465,43 +459,54 @@ export function ExperiencePage() {
               Habilidades
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {techStackData.map((section, sectionIndex) => (
-                <motion.div
-                  key={section.title}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.2 + sectionIndex * 0.06 }}
-                  className={cn(
-                    'p-4 rounded-xl border transition-all duration-300',
-                    isDark
-                      ? 'bg-night-card/60 border-night-border/40 hover:border-night-primary/30'
-                      : 'bg-day-card/70 border-day-border/40 hover:border-day-primary/30'
-                  )}
-                >
-                  <h5 className={cn(
-                    'text-[10px] uppercase tracking-[0.2em] font-bold mb-3',
-                    isDark ? 'text-night-primary/70' : 'text-day-primary/70'
-                  )}>
-                    {section.title}
-                  </h5>
-                  <div className="flex flex-wrap gap-1.5">
-                    {section.items.map((item) => (
-                      <span
-                        key={item}
-                        className={cn(
-                          'px-2.5 py-1 rounded-md text-xs font-medium',
-                          isDark
-                            ? 'bg-night-primary/8 text-night-text/85'
-                            : 'bg-day-primary/8 text-day-text/85'
-                        )}
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {techStackData.map((section, sectionIndex) => {
+                const Icon = section.icon;
+                return (
+                  <motion.div
+                    key={section.title}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.2 + sectionIndex * 0.06 }}
+                    className={cn(
+                      'p-5 rounded-xl border transition-all duration-300',
+                      isDark
+                        ? 'bg-night-card/60 border-night-border/40 hover:border-night-primary/30'
+                        : 'bg-day-card/70 border-day-border/40 hover:border-day-primary/30'
+                    )}
+                  >
+                    <div className="flex items-center gap-2.5 mb-4">
+                      <div className={cn(
+                        'p-1.5 rounded-lg',
+                        isDark ? 'bg-night-primary/10' : 'bg-day-primary/10'
+                      )}>
+                        <Icon className="w-4 h-4 text-day-primary" />
+                      </div>
+                      <h5 className={cn(
+                        'text-xs uppercase tracking-[0.18em] font-bold',
+                        isDark ? 'text-night-text/70' : 'text-day-text/70'
+                      )}>
+                        {section.title}
+                      </h5>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {section.items.map((item) => (
+                        <span
+                          key={item}
+                          className={cn(
+                            'px-3 py-1.5 rounded-lg text-sm font-medium',
+                            isDark
+                              ? 'bg-night-primary/8 text-night-text/85'
+                              : 'bg-day-primary/8 text-day-text/85'
+                          )}
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
 
