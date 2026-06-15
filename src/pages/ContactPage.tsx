@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 import { motion } from 'framer-motion';
-import { Mail, FileText, ArrowLeft, ArrowRight, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import { Mail, FileText, ArrowLeft, ArrowRight, CheckCircle, Loader2, AlertCircle, Clock, MapPin, Briefcase } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 function GitHubIcon({ className }: { className?: string }) {
@@ -296,7 +296,7 @@ export function ContactPage() {
           transition={{ duration: 0.5, delay: 0.6 }}
           className="max-w-lg mx-auto"
         >
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-8 mb-16">
             <div>
               <label
                 htmlFor="name"
@@ -424,6 +424,38 @@ export function ContactPage() {
               )}
             </button>
           </form>
+
+          {/* Info badges */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className={cn(
+              'p-4 sm:p-5 rounded-xl text-center',
+              isDark ? 'bg-night-bg/40 border border-night-border/30' : 'bg-day-bg/40 border border-day-border/30'
+            )}
+          >
+            <div className="flex items-center justify-center gap-5 sm:gap-10 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-day-primary" />
+                <span className={cn('text-xs sm:text-sm', isDark ? 'text-night-text/60' : 'text-day-text/60')}>
+                  Respondo en menos de 24hs
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-day-primary" />
+                <span className={cn('text-xs sm:text-sm', isDark ? 'text-night-text/60' : 'text-day-text/60')}>
+                  Colombia · GMT-5
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-day-primary" />
+                <span className={cn('text-xs sm:text-sm', isDark ? 'text-night-text/60' : 'text-day-text/60')}>
+                  Freelance · Remoto
+                </span>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
       </div>
