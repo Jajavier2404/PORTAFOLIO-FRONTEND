@@ -72,7 +72,7 @@ const AUTOPLAY_INTERVAL = 8000;
 function ProjectCard({ project, isDark }: { project: typeof projects[0]; isDark: boolean }) {
   return (
     <div className={cn(
-      'w-full min-w-0 rounded-xl overflow-hidden transition-all duration-300 border h-full',
+      'flex-1 min-w-0 rounded-xl overflow-hidden transition-all duration-300 border h-full',
       isDark ? 'glass-night border-night-border/40' : 'glass-day border-day-border/40'
     )}>
       <div className="relative h-40 xl:h-44 overflow-hidden">
@@ -155,7 +155,8 @@ export function Projects() {
   const { isDark } = useTheme();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [isDesktopPaused, setIsDesktopPaused] = useState(false);
+  const [isTopPaused, setIsTopPaused] = useState(false);
+  const [isBottomPaused, setIsBottomPaused] = useState(false);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const progressRef = useRef<number>(0);
@@ -253,47 +254,45 @@ export function Projects() {
         </motion.div>
       </div>
 
-      {/* Desktop - Dos filas simultáneas de 5 cards */}
-      <div
-        className="hidden lg:block space-y-6 px-4 xl:px-6"
-        onMouseEnter={() => setIsDesktopPaused(true)}
-        onMouseLeave={() => setIsDesktopPaused(false)}
-      >
+      {/* Desktop - Dos filas simultáneas, pausa individual por hover */}
+      <div className="hidden lg:block space-y-6 px-4 xl:px-6">
         <div className="overflow-hidden rounded-2xl">
           <div
             className="flex animate-scroll-left"
-            style={{ animationPlayState: isDesktopPaused ? 'paused' : 'running' }}
+            onMouseEnter={() => setIsTopPaused(true)}
+            onMouseLeave={() => setIsTopPaused(false)}
+            style={{ animationPlayState: isTopPaused ? 'paused' : 'running' }}
           >
-            {[0, 1].map((setIndex) => (
-              <div
-                key={`top-set-${setIndex}`}
-                className="grid min-w-full shrink-0 gap-4 xl:gap-5"
-                style={{ gridTemplateColumns: `repeat(${desktopTopRow.length}, minmax(0, 1fr))` }}
-              >
-                {desktopTopRow.map((project, index) => (
-                  <ProjectCard key={`top-${setIndex}-${index}-${project.title}`} project={project} isDark={isDark} />
-                ))}
-              </div>
-            ))}
+            <div className="flex gap-4 shrink-0" style={{ width: '100%' }}>
+              {desktopTopRow.map((project, index) => (
+                <ProjectCard key={`top-0-${index}-${project.title}`} project={project} isDark={isDark} />
+              ))}
+            </div>
+            <div className="flex gap-4 shrink-0" style={{ width: '100%' }}>
+              {desktopTopRow.map((project, index) => (
+                <ProjectCard key={`top-1-${index}-${project.title}`} project={project} isDark={isDark} />
+              ))}
+            </div>
           </div>
         </div>
 
         <div className="overflow-hidden rounded-2xl">
           <div
             className="flex animate-scroll-right"
-            style={{ animationPlayState: isDesktopPaused ? 'paused' : 'running' }}
+            onMouseEnter={() => setIsBottomPaused(true)}
+            onMouseLeave={() => setIsBottomPaused(false)}
+            style={{ animationPlayState: isBottomPaused ? 'paused' : 'running' }}
           >
-            {[0, 1].map((setIndex) => (
-              <div
-                key={`bottom-set-${setIndex}`}
-                className="grid min-w-full shrink-0 gap-4 xl:gap-5"
-                style={{ gridTemplateColumns: `repeat(${desktopBottomRow.length}, minmax(0, 1fr))` }}
-              >
-                {desktopBottomRow.map((project, index) => (
-                  <ProjectCard key={`bottom-${setIndex}-${index}-${project.title}`} project={project} isDark={isDark} />
-                ))}
-              </div>
-            ))}
+            <div className="flex gap-4 shrink-0" style={{ width: '100%' }}>
+              {desktopBottomRow.map((project, index) => (
+                <ProjectCard key={`bottom-0-${index}-${project.title}`} project={project} isDark={isDark} />
+              ))}
+            </div>
+            <div className="flex gap-4 shrink-0" style={{ width: '100%' }}>
+              {desktopBottomRow.map((project, index) => (
+                <ProjectCard key={`bottom-1-${index}-${project.title}`} project={project} isDark={isDark} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
