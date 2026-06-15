@@ -7,6 +7,8 @@ import { LoginPage } from './pages/LoginPage';
 import { ChatPage } from './pages/ChatPage';
 import { AdminPage } from './pages/AdminPage';
 import { ProjectsPage } from './pages/ProjectsPage';
+import { ExperiencePage } from './pages/ExperiencePage';
+import { ContactPage } from './pages/ContactPage';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/proyectos" element={<ProjectsPage />} />
+              <Route path="/experiencia" element={<ExperiencePage />} />
+              <Route path="/contacto" element={<ContactPage />} />
             </Routes>
           </div>
         </AuthProvider>
