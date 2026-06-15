@@ -1,12 +1,30 @@
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 import { motion } from 'framer-motion';
-import { Code2, Sparkles } from 'lucide-react';
+import { User, Layout, Layers, Cpu } from 'lucide-react';
 import { Hero } from '../components/Hero';
 import { Experience } from '../components/Experience';
 import { Projects } from '../components/Projects';
 import { Contact } from '../components/Contact';
 import { Footer } from '../components/Footer';
+
+const skills = [
+  {
+    icon: Layout,
+    title: 'Clean Architecture',
+    description: 'Código mantenible, modular y escalable con patrones sólidos.'
+  },
+  {
+    icon: Layers,
+    title: 'Full-Stack',
+    description: 'Del frontend al backend con tecnologías modernas y eficientes.'
+  },
+  {
+    icon: Cpu,
+    title: 'AI & MCP',
+    description: 'Integración de modelos de IA y sistemas multi-agente.'
+  }
+];
 
 function AboutMe() {
   const { isDark } = useTheme();
@@ -24,50 +42,73 @@ function AboutMe() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6 }}
-          className={cn(
-            'relative p-8 md:p-10 rounded-2xl overflow-hidden',
-            isDark ? 'glass-night' : 'glass-day'
-          )}
+          className="text-center"
         >
-          {/* decorative accent line */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-day-primary/60 via-day-primary to-day-primary/60" />
+          {/* Badge */}
+          <div
+            className={cn(
+              'inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-6',
+              isDark
+                ? 'bg-night-primary/20 text-night-primary'
+                : 'bg-day-primary/15 text-day-primary'
+            )}
+          >
+            <User className="w-4 h-4" />
+            Sobre mí
+          </div>
 
-          <div className="flex items-start gap-4 md:gap-6">
-            <div className={cn(
-              'p-3 rounded-xl shrink-0 hidden sm:block',
-              isDark ? 'bg-night-primary/15' : 'bg-day-primary/15'
-            )}>
-              <Code2 className="w-6 h-6 text-day-primary" />
-            </div>
+          {/* Description */}
+          <p
+            className={cn(
+              'text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-10',
+              isDark ? 'text-night-text/80' : 'text-day-text/80'
+            )}
+          >
+            Ingeniero de software apasionado por la arquitectura limpia y las soluciones
+            que realmente importan. Me muevo entre el frontend y el backend con la misma
+            comodidad, buscando siempre el balance entre lo que funciona hoy y lo que escala mañana.
+          </p>
 
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <h2 className={cn(
-                  'text-xl md:text-2xl font-bold',
-                  isDark ? 'text-night-text' : 'text-day-text'
-                )}>
-                  Sobre mí
-                </h2>
-                <Sparkles className="w-4 h-4 text-day-primary" />
-              </div>
-              <p className={cn(
-                'text-sm md:text-base leading-relaxed max-w-2xl',
-                isDark ? 'text-night-text/75' : 'text-day-text/75'
-              )}>
-                Ingeniero de software apasionado por la arquitectura limpia, el código mantenible
-                y las soluciones que realmente importan. Me muevo entre el frontend y el backend
-                con la misma comodidad, siempre buscando el balance entre lo que funciona hoy
-                y lo que escala mañana.
-              </p>
-              <p className={cn(
-                'text-sm md:text-base leading-relaxed',
-                isDark ? 'text-night-text/60' : 'text-day-text/60'
-              )}>
-                Actualmente explorando el ecosistema MCP, microservicios con Node.js y
-                sistemas multi-idioma. Creo firmemente que el buen software se construye
-                con fundamentos sólidos, no con atajos.
-              </p>
-            </div>
+          {/* 3 characteristics */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {skills.map((skill, i) => (
+              <motion.div
+                key={skill.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.1 + i * 0.1 }}
+                className={cn(
+                  'p-5 rounded-xl border text-left transition-all duration-300',
+                  isDark
+                    ? 'bg-night-card/60 border-night-border/40 hover:border-night-primary/40'
+                    : 'bg-day-card/80 border-day-border/40 hover:border-day-primary/40'
+                )}
+              >
+                <skill.icon
+                  className={cn(
+                    'w-5 h-5 mb-3',
+                    isDark ? 'text-night-primary' : 'text-day-primary'
+                  )}
+                />
+                <h3
+                  className={cn(
+                    'text-sm font-bold mb-1.5',
+                    isDark ? 'text-night-text' : 'text-day-text'
+                  )}
+                >
+                  {skill.title}
+                </h3>
+                <p
+                  className={cn(
+                    'text-xs leading-relaxed',
+                    isDark ? 'text-night-text/60' : 'text-day-text/60'
+                  )}
+                >
+                  {skill.description}
+                </p>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
       </div>

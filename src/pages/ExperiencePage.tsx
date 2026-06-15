@@ -465,51 +465,42 @@ export function ExperiencePage() {
               Habilidades
             </h3>
 
-            <div
-              className={cn(
-                'p-6 sm:p-8 rounded-2xl border',
-                isDark ? 'glass-night border-night-border/50' : 'glass-day border-day-border/50'
-              )}
-            >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {techStackData.map((section, sectionIndex) => (
-                <div
+                <motion.div
                   key={section.title}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.2 + sectionIndex * 0.06 }}
                   className={cn(
-                    'flex items-baseline gap-3 py-3',
-                    sectionIndex !== techStackData.length - 1
-                      ? isDark
-                        ? 'border-b border-night-border/30'
-                        : 'border-b border-day-border/30'
-                      : ''
+                    'p-4 rounded-xl border transition-all duration-300',
+                    isDark
+                      ? 'bg-night-card/60 border-night-border/40 hover:border-night-primary/30'
+                      : 'bg-day-card/70 border-day-border/40 hover:border-day-primary/30'
                   )}
                 >
-                  <span className={cn(
-                    'shrink-0 text-xs uppercase tracking-[0.18em] font-bold min-w-[9rem]',
-                    isDark ? 'text-night-text/50' : 'text-day-text/50'
+                  <h5 className={cn(
+                    'text-[10px] uppercase tracking-[0.2em] font-bold mb-3',
+                    isDark ? 'text-night-primary/70' : 'text-day-primary/70'
                   )}>
                     {section.title}
-                  </span>
-                  <div className="flex flex-wrap items-center gap-x-1.5">
-                    {section.items.map((item, i) => (
-                      <span key={i} className="flex items-center">
-                        <span className={cn(
-                          'text-sm font-medium',
-                          isDark ? 'text-night-text/85' : 'text-day-text/85'
-                        )}>
-                          {item}
-                        </span>
-                        {i < section.items.length - 1 && (
-                          <span className={cn(
-                            'mx-2 text-xs',
-                            isDark ? 'text-night-text/25' : 'text-day-text/25'
-                          )}>
-                            /
-                          </span>
+                  </h5>
+                  <div className="flex flex-wrap gap-1.5">
+                    {section.items.map((item) => (
+                      <span
+                        key={item}
+                        className={cn(
+                          'px-2.5 py-1 rounded-md text-xs font-medium',
+                          isDark
+                            ? 'bg-night-primary/8 text-night-text/85'
+                            : 'bg-day-primary/8 text-day-text/85'
                         )}
+                      >
+                        {item}
                       </span>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </motion.div>
