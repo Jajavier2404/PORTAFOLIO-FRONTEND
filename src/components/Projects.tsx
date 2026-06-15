@@ -63,18 +63,18 @@ const projects = [
   }
 ];
 
-// Triplicar para loop infinito suave
-const tripleProjects = [...projects, ...projects, ...projects];
+const desktopTopRow = projects.slice(0, 5);
+const desktopBottomRow = projects.slice(1, 6);
 
 const AUTOPLAY_INTERVAL = 8000;
 
 function ProjectCard({ project, isDark }: { project: typeof projects[0]; isDark: boolean }) {
   return (
     <div className={cn(
-      'w-[380px] flex-shrink-0 rounded-xl overflow-hidden transition-all duration-300',
-      isDark ? 'glass-night' : 'glass-day'
+      'w-full min-w-0 rounded-xl overflow-hidden transition-all duration-300 border h-full',
+      isDark ? 'glass-night border-night-border/40' : 'glass-day border-day-border/40'
     )}>
-      <div className="relative h-52 overflow-hidden">
+      <div className="relative h-40 xl:h-44 overflow-hidden">
         <img
           src={project.image}
           alt={project.title}
@@ -86,9 +86,9 @@ function ProjectCard({ project, isDark }: { project: typeof projects[0]; isDark:
         )} />
       </div>
       
-      <div className="p-5">
+      <div className="p-4 xl:p-5">
         <h3 className={cn(
-          'text-xl font-bold mb-2',
+          'text-lg xl:text-xl font-bold mb-2',
           isDark ? 'text-night-text' : 'text-day-text'
         )}>
           {project.title}
@@ -102,11 +102,11 @@ function ProjectCard({ project, isDark }: { project: typeof projects[0]; isDark:
         </p>
         
         <div className="flex flex-wrap gap-2 mb-4">
-          {project.technologies.slice(0, 3).map((tech) => (
+          {project.technologies.slice(0, 2).map((tech) => (
             <span
               key={tech}
               className={cn(
-                'px-2.5 py-1 rounded-lg text-xs font-medium',
+                'px-2 py-1 rounded-lg text-[11px] font-medium',
                 isDark
                   ? 'bg-night-primary/20 text-night-primary'
                   : 'bg-day-primary/20 text-day-primary'
@@ -117,13 +117,13 @@ function ProjectCard({ project, isDark }: { project: typeof projects[0]; isDark:
           ))}
         </div>
         
-        <div className="flex gap-3">
+        <div className="flex gap-2 xl:gap-3 flex-wrap">
           <a
             href={project.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+              'flex items-center gap-2 px-3 xl:px-4 py-2 rounded-lg text-xs xl:text-sm font-medium transition-all',
               isDark
                 ? 'bg-night-primary/20 text-night-text hover:bg-night-primary/30'
                 : 'bg-day-primary/20 text-day-text hover:bg-day-primary/30'
@@ -135,7 +135,7 @@ function ProjectCard({ project, isDark }: { project: typeof projects[0]; isDark:
           <a
             href={project.liveUrl}
             className={cn(
-              'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+              'flex items-center gap-2 px-3 xl:px-4 py-2 rounded-lg text-xs xl:text-sm font-medium transition-all',
               isDark
                 ? 'bg-day-primary text-night-bg hover:bg-night-accent'
                 : 'bg-day-primary text-white hover:bg-day-accent'
@@ -257,40 +257,34 @@ export function Projects() {
         </motion.div>
       </div>
 
-      {/* Desktop - Dos filas infinitas */}
-      <div 
-        className="hidden lg:block relative overflow-hidden"
+      {/* Desktop - Dos filas simultáneas de 5 cards */}
+      <div
+        className="hidden lg:block space-y-6 px-4 xl:px-6"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        {/* Gradiente izquierdo */}
-        <div className={cn(
-          'absolute left-0 top-0 bottom-0 w-32 z-10 pointer-events-none',
-          isDark 
-            ? 'bg-gradient-to-r from-night-bg to-transparent' 
-            : 'bg-gradient-to-r from-day-bg to-transparent'
-        )} />
-
-        {/* Gradiente derecho */}
-        <div className={cn(
-          'absolute right-0 top-0 bottom-0 w-32 z-10 pointer-events-none',
-          isDark 
-            ? 'bg-gradient-to-l from-night-bg to-transparent' 
-            : 'bg-gradient-to-l from-day-bg to-transparent'
-        )} />
-
-        {/* Primera fila - izquierda */}
-        <div className="flex gap-6 mb-6 animate-scroll-left">
-          {tripleProjects.map((project, index) => (
-            <ProjectCard key={`row1-${index}`} project={project} isDark={isDark} />
-          ))}
+        <div className="overflow-hidden rounded-2xl">
+          <div className={cn('flex', !isPaused && 'animate-scroll-left')}>
+            {[0, 1].map((setIndex) => (
+              <div key={`top-set-${setIndex}`} className="grid min-w-full shrink-0 grid-cols-5 gap-4 xl:gap-5">
+                {desktopTopRow.map((project, index) => (
+                  <ProjectCard key={`top-${setIndex}-${index}-${project.title}`} project={project} isDark={isDark} />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Segunda fila - derecha */}
-        <div className="flex gap-6 animate-scroll-right">
-          {[...tripleProjects].reverse().map((project, index) => (
-            <ProjectCard key={`row2-${index}`} project={project} isDark={isDark} />
-          ))}
+        <div className="overflow-hidden rounded-2xl">
+          <div className={cn('flex', !isPaused && 'animate-scroll-right')}>
+            {[0, 1].map((setIndex) => (
+              <div key={`bottom-set-${setIndex}`} className="grid min-w-full shrink-0 grid-cols-5 gap-4 xl:gap-5">
+                {desktopBottomRow.map((project, index) => (
+                  <ProjectCard key={`bottom-${setIndex}-${index}-${project.title}`} project={project} isDark={isDark} />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
